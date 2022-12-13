@@ -41,7 +41,7 @@ func (g LabelGenerator) createResources(svc *illumioapi.PCE, labels []illumioapi
 				"external_data_set":       label.ExternalDataSet,
 				"external_data_reference": label.ExternalDataReference,
 			},
-			[]string{"external_data_set", "external_data_reference"},
+			[]string{},
 			map[string]interface{}{},
 		))
 	}
