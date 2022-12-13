@@ -68,7 +68,7 @@ func (p *IllumioProvider) GetName() string {
 func (p *IllumioProvider) GetProviderData(arg ...string) map[string]interface{} {
 	return map[string]interface{}{
 		"provider": map[string]interface{}{
-			"illumio-core": map[string]interface{}{},
+			p.GetName(): map[string]interface{}{},
 		},
 	}
 }
@@ -78,7 +78,11 @@ func (IllumioProvider) GetResourceConnections() map[string]map[string][]string {
 }
 
 func (p *IllumioProvider) GetSupportedService() map[string]terraformutils.ServiceGenerator {
-	return map[string]terraformutils.ServiceGenerator{}
+	return map[string]terraformutils.ServiceGenerator{
+		"labels":              &LabelGenerator{},
+		"managed_workloads":   &ManagedWorkloadGenerator{},
+		"unmanaged_workloads": &UnmanagedWorkloadGenerator{},
+	}
 }
 
 func (p *IllumioProvider) InitService(serviceName string, verbose bool) error {
@@ -87,7 +91,7 @@ func (p *IllumioProvider) InitService(serviceName string, verbose bool) error {
 		return errors.New("illumio: " + serviceName + " not supported service")
 	}
 	p.Service = p.GetSupportedService()[serviceName]
-	p.Service.SetName(serviceName)
+	p.Service.SetName(stripServiceNameQualifiers(serviceName))
 	p.Service.SetVerbose(verbose)
 	p.Service.SetProviderName(p.GetName())
 	p.Service.SetArgs(map[string]interface{}{

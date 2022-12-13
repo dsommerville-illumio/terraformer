@@ -35,7 +35,7 @@ func newCmdIllumioImporter(options ImportOptions) *cobra.Command {
 	}
 
 	cmd.AddCommand(listCmd(newIllumioProvider()))
-	baseProviderFlags(cmd.PersistentFlags(), &options, "", "")
+	baseProviderFlags(cmd.PersistentFlags(), &options, "managed_workloads,labels", "labels=href1:href2")
 
 	return cmd
 }
