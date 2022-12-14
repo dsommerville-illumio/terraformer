@@ -32,21 +32,11 @@ func (g ManagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloads
 			resourceName,
 			"illumio-core_managed_workload",
 			"illumio-core",
-			map[string]string{
-				"name":                    workload.Name,
-				"description":             workload.Description,
-				"service_principal_name":  workload.ServicePrincipalName,
-				"service_provider":        workload.ServiceProvider,
-				"data_center":             workload.DataCenter,
-				"data_center_zone":        workload.DataCenterZone,
-				"enforcement_mode":        workload.EnforcementMode,
-				"external_data_set":       workload.ExternalDataSet,
-				"external_data_reference": workload.ExternalDataReference,
-			},
+			map[string]string{},
 			[]string{},
 			map[string]interface{}{
-				"labels":                  workload.Labels,
-				"ignored_interface_names": workload.IgnoredInterfaceNames,
+				"labels":                  convertLabelsToReferenceSlice(*workload.Labels),
+				"ignored_interface_names": *workload.IgnoredInterfaceNames,
 			},
 		))
 	}

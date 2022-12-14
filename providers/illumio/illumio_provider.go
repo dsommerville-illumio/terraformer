@@ -91,7 +91,7 @@ func (p *IllumioProvider) InitService(serviceName string, verbose bool) error {
 		return errors.New("illumio: " + serviceName + " not supported service")
 	}
 	p.Service = p.GetSupportedService()[serviceName]
-	p.Service.SetName(stripServiceNameQualifiers(serviceName))
+	p.Service.SetName(serviceName)
 	p.Service.SetVerbose(verbose)
 	p.Service.SetProviderName(p.GetName())
 	p.Service.SetArgs(map[string]interface{}{
