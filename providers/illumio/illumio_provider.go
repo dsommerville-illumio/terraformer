@@ -16,6 +16,7 @@ package illumio
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -32,31 +33,50 @@ type IllumioProvider struct { //nolint
 }
 
 func (p *IllumioProvider) Init(args []string) error {
-	if os.Getenv("ILLUMIO_PCE_HOST") == "" {
-		return errors.New("set ILLUMIO_PCE_HOST env var")
-	}
-	p.pceHost = os.Getenv("ILLUMIO_PCE_HOST")
-
-	if os.Getenv("ILLUMIO_PCE_ORG_ID") == "" {
-		log.Println("No value set for ILLUMIO_PCE_ORG_ID, using default org ID 1")
-		p.pceOrgId = 1
-	} else {
-		orgId, err := strconv.Atoi(os.Getenv("ILLUMIO_PCE_ORG_ID"))
+	p.pceHost = args[0]
+	if args[1] != "" {
+		orgId, err := strconv.Atoi(args[1])
 		if err != nil {
-			return err
+			return errors.New(fmt.Sprintf("Invalid org ID value %v, must be integer value", args[2]))
 		}
 		p.pceOrgId = orgId
 	}
+	p.apiUsername = args[2]
+	p.apiSecret = args[3]
 
-	if os.Getenv("ILLUMIO_API_KEY_USERNAME") == "" {
-		return errors.New("set ILLUMIO_API_KEY_USERNAME env var")
+	if p.pceHost == "" {
+		if os.Getenv("ILLUMIO_PCE_HOST") == "" {
+			return errors.New("Missing PCE host, set --host or ILLUMIO_PCE_HOST env var")
+		}
+		p.pceHost = os.Getenv("ILLUMIO_PCE_HOST")
 	}
-	p.apiUsername = os.Getenv("ILLUMIO_API_KEY_USERNAME")
 
-	if os.Getenv("ILLUMIO_API_KEY_SECRET") == "" {
-		return errors.New("set ILLUMIO_API_KEY_SECRET env var")
+	if p.pceOrgId == 0 {
+		if os.Getenv("ILLUMIO_PCE_ORG_ID") == "" {
+			log.Println("No value set for ILLUMIO_PCE_ORG_ID, using default org ID 1")
+			p.pceOrgId = 1
+		} else {
+			orgId, err := strconv.Atoi(os.Getenv("ILLUMIO_PCE_ORG_ID"))
+			if err != nil {
+				return err
+			}
+			p.pceOrgId = orgId
+		}
 	}
-	p.apiSecret = os.Getenv("ILLUMIO_API_KEY_SECRET")
+
+	if p.apiUsername == "" {
+		if os.Getenv("ILLUMIO_API_KEY_USERNAME") == "" {
+			return errors.New("Missing API key, set --api-key or ILLUMIO_API_KEY_USERNAME env var")
+		}
+		p.apiUsername = os.Getenv("ILLUMIO_API_KEY_USERNAME")
+	}
+
+	if p.apiSecret == "" {
+		if os.Getenv("ILLUMIO_API_KEY_SECRET") == "" {
+			return errors.New("Missing API secret, set --api-secret or ILLUMIO_API_KEY_SECRET env var")
+		}
+		p.apiSecret = os.Getenv("ILLUMIO_API_KEY_SECRET")
+	}
 
 	return nil
 }
@@ -74,14 +94,32 @@ func (p *IllumioProvider) GetProviderData(arg ...string) map[string]interface{} 
 }
 
 func (IllumioProvider) GetResourceConnections() map[string]map[string][]string {
-	return map[string]map[string][]string{}
+	return map[string]map[string][]string{
+		"container_cluster_workload_profile": {
+			"container_cluster": []string{"container_cluster_href", "id"},
+			"label":             []string{"labels.href", "id"},
+		},
+		"label_groups": {
+			"label":       []string{"labels.href", "id"},
+			"label_group": []string{"sub_groups.href", "id"},
+		},
+		"managed_workloads": {
+			"label": []string{"labels.href", "id"},
+		},
+		"unmanaged_workloads": {
+			"label": []string{"labels.href", "id"},
+		},
+	}
 }
 
 func (p *IllumioProvider) GetSupportedService() map[string]terraformutils.ServiceGenerator {
 	return map[string]terraformutils.ServiceGenerator{
-		"labels":              &LabelGenerator{},
-		"managed_workloads":   &ManagedWorkloadGenerator{},
-		"unmanaged_workloads": &UnmanagedWorkloadGenerator{},
+		"container_cluster":  &ContainerClusterGenerator{},
+		"ip_list":            &IPListGenerator{},
+		"label":              &LabelGenerator{},
+		"label_group":        &LabelGroupGenerator{},
+		"managed_workload":   &ManagedWorkloadGenerator{},
+		"unmanaged_workload": &UnmanagedWorkloadGenerator{},
 	}
 }
 

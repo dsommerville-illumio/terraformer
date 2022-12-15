@@ -15,6 +15,9 @@
 package illumio
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
 	"github.com/brian1917/illumioapi"
 )
@@ -26,7 +29,7 @@ type ManagedWorkloadGenerator struct {
 func (g ManagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloads []illumioapi.Workload) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, workload := range workloads {
-		resourceName := stripIdFromHref(workload.Href)
+		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(workload.Hostname), stripIdFromHref(workload.Href))
 		resources = append(resources, terraformutils.NewResource(
 			workload.Href,
 			resourceName,

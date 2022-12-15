@@ -22,41 +22,40 @@ import (
 	"github.com/brian1917/illumioapi"
 )
 
-type UnmanagedWorkloadGenerator struct {
+type LabelGroupGenerator struct {
 	IllumioService
 }
 
-func (g UnmanagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloads []illumioapi.Workload) []terraformutils.Resource {
+func (g LabelGroupGenerator) createResources(svc *illumioapi.PCE, labelGroups []illumioapi.LabelGroup) []terraformutils.Resource {
 	var resources []terraformutils.Resource
-	for _, workload := range workloads {
-		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(workload.Hostname), stripIdFromHref(workload.Href))
+	for _, labelGroup := range labelGroups {
+		resourceName := fmt.Sprintf("%s__%s", labelGroup.Key, labelGroup.Name)
 		resources = append(resources, terraformutils.NewResource(
-			workload.Href,
-			resourceName,
-			"illumio-core_unmanaged_workload",
+			labelGroup.Href,
+			strings.ToLower(resourceName),
+			"illumio-core_label_group",
 			"illumio-core",
 			map[string]string{},
 			[]string{},
 			map[string]interface{}{
-				"interfaces": workload.Interfaces,
-				"online":     workload.Online,
-				"labels":     convertLabelsToReferenceSlice(*workload.Labels),
+				"labels":     convertLabelsToReferenceSlice(labelGroup.Labels),
+				"sub_groups": labelGroup.SubGroups,
 			},
 		))
 	}
 	return resources
 }
 
-func (g *UnmanagedWorkloadGenerator) InitResources() error {
+func (g *LabelGroupGenerator) InitResources() error {
 	svc, err := g.generateService()
 	if err != nil {
 		return err
 	}
-	// only get unmanaged workloads from the PCE
-	workloads, _, err := svc.GetWklds(map[string]string{"managed": "false"})
+	// pass empty params to get all label groups from the PCE
+	labelGroups, _, err := svc.GetLabelGroups(map[string]string{}, DRAFT)
 	if err != nil {
 		return err
 	}
-	g.Resources = g.createResources(svc, workloads)
+	g.Resources = g.createResources(svc, labelGroups)
 	return nil
 }

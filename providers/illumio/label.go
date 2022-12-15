@@ -29,15 +29,13 @@ type LabelGenerator struct {
 func (g LabelGenerator) createResources(svc *illumioapi.PCE, labels []illumioapi.Label) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, label := range labels {
-		resourceName := fmt.Sprintf("%s_%s", label.Key, strings.ToLower(label.Value))
-		resources = append(resources, terraformutils.NewResource(
+		resourceName := fmt.Sprintf("%s__%s", label.Key, label.Value)
+		resources = append(resources, terraformutils.NewSimpleResource(
 			label.Href,
-			resourceName,
+			strings.ToLower(resourceName),
 			"illumio-core_label",
 			"illumio-core",
-			map[string]string{},
 			[]string{},
-			map[string]interface{}{},
 		))
 	}
 	return resources

@@ -15,48 +15,40 @@
 package illumio
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
 	"github.com/brian1917/illumioapi"
 )
 
-type UnmanagedWorkloadGenerator struct {
+type IPListGenerator struct {
 	IllumioService
 }
 
-func (g UnmanagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloads []illumioapi.Workload) []terraformutils.Resource {
+func (g IPListGenerator) createResources(svc *illumioapi.PCE, ipLists []illumioapi.IPList) []terraformutils.Resource {
 	var resources []terraformutils.Resource
-	for _, workload := range workloads {
-		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(workload.Hostname), stripIdFromHref(workload.Href))
-		resources = append(resources, terraformutils.NewResource(
-			workload.Href,
-			resourceName,
-			"illumio-core_unmanaged_workload",
+	for _, ipList := range ipLists {
+		resources = append(resources, terraformutils.NewSimpleResource(
+			ipList.Href,
+			strings.ToLower(ipList.Name),
+			"illumio-core_ip_list",
 			"illumio-core",
-			map[string]string{},
 			[]string{},
-			map[string]interface{}{
-				"interfaces": workload.Interfaces,
-				"online":     workload.Online,
-				"labels":     convertLabelsToReferenceSlice(*workload.Labels),
-			},
 		))
 	}
 	return resources
 }
 
-func (g *UnmanagedWorkloadGenerator) InitResources() error {
+func (g *IPListGenerator) InitResources() error {
 	svc, err := g.generateService()
 	if err != nil {
 		return err
 	}
-	// only get unmanaged workloads from the PCE
-	workloads, _, err := svc.GetWklds(map[string]string{"managed": "false"})
+	// pass empty params to get all IP lists from the PCE
+	ipLists, _, err := svc.GetIPLists(map[string]string{}, DRAFT)
 	if err != nil {
 		return err
 	}
-	g.Resources = g.createResources(svc, workloads)
+	g.Resources = g.createResources(svc, ipLists)
 	return nil
 }

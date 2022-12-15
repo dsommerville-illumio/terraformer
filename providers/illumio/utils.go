@@ -6,6 +6,10 @@ import (
 	"github.com/brian1917/illumioapi"
 )
 
+const (
+	DRAFT string = "draft"
+)
+
 type Reference struct {
 	Href string `json:"href,omitempty"`
 }
