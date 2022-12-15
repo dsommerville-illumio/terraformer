@@ -20,13 +20,18 @@ import (
 )
 
 func newCmdIllumioImporter(options ImportOptions) *cobra.Command {
+	var pceHost string
+	var pceOrgId string
+	var pceAPIKey string
+	var pceAPISecret string
+
 	cmd := &cobra.Command{
 		Use:   "illumio",
 		Short: "Import current state to Terraform configuration from the Illumio PCE",
 		Long:  "Import current state to Terraform configuration from the Illumio PCE",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			provider := newIllumioProvider()
-			err := Import(provider, options, []string{})
+			err := Import(provider, options, []string{pceHost, pceOrgId, pceAPIKey, pceAPISecret})
 			if err != nil {
 				return err
 			}
@@ -35,8 +40,11 @@ func newCmdIllumioImporter(options ImportOptions) *cobra.Command {
 	}
 
 	cmd.AddCommand(listCmd(newIllumioProvider()))
-	baseProviderFlags(cmd.PersistentFlags(), &options, "managed_workloads,labels", "labels=href1:href2")
-
+	baseProviderFlags(cmd.PersistentFlags(), &options, "label,ip_list", "label=href1:href2")
+	cmd.PersistentFlags().StringVarP(&pceHost, "host", "H", "", "host=https://my.pce.com:8443")
+	cmd.PersistentFlags().StringVarP(&pceOrgId, "org-id", "", "", "org-id=123")
+	cmd.PersistentFlags().StringVarP(&pceAPIKey, "api-key", "", "", "api-key=<PCE_API_KEY>")
+	cmd.PersistentFlags().StringVarP(&pceAPISecret, "api-secret", "", "", "api-secret=<PCE_API_SECRET>")
 	return cmd
 }
 
