@@ -30,17 +30,12 @@ func (g LabelGroupGenerator) createResources(svc *illumioapi.PCE, labelGroups []
 	var resources []terraformutils.Resource
 	for _, labelGroup := range labelGroups {
 		resourceName := fmt.Sprintf("%s__%s", labelGroup.Key, labelGroup.Name)
-		resources = append(resources, terraformutils.NewResource(
+		resources = append(resources, terraformutils.NewSimpleResource(
 			labelGroup.Href,
 			strings.ToLower(resourceName),
 			"illumio-core_label_group",
 			"illumio-core",
-			map[string]string{},
 			[]string{},
-			map[string]interface{}{
-				"labels":     convertLabelsToReferenceSlice(labelGroup.Labels),
-				"sub_groups": labelGroup.SubGroups,
-			},
 		))
 	}
 	return resources

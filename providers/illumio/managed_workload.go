@@ -38,7 +38,6 @@ func (g ManagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloads
 			map[string]string{},
 			[]string{},
 			map[string]interface{}{
-				"labels":                  convertLabelsToReferenceSlice(*workload.Labels),
 				"ignored_interface_names": *workload.IgnoredInterfaceNames,
 			},
 		))

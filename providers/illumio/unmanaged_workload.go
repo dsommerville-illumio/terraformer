@@ -40,7 +40,6 @@ func (g UnmanagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloa
 			map[string]interface{}{
 				"interfaces": workload.Interfaces,
 				"online":     workload.Online,
-				"labels":     convertLabelsToReferenceSlice(*workload.Labels),
 			},
 		))
 	}

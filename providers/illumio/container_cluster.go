@@ -43,9 +43,7 @@ func (g ContainerClusterGenerator) loadWorkloadProfiles(
 				map[string]string{},
 				[]string{},
 				map[string]interface{}{
-					"managed":       ccwp.Managed,
-					"assign_labels": ccwp.AssignLabels,
-					"labels":        ccwp.Labels,
+					"managed": ccwp.Managed,
 				},
 			))
 		}
