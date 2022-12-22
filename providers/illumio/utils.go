@@ -2,8 +2,6 @@ package illumio
 
 import (
 	"strings"
-
-	"github.com/brian1917/illumioapi"
 )
 
 const (
@@ -19,12 +17,4 @@ func stripIdFromHref(href string) string {
 		return href
 	}
 	return strings.Trim(href[strings.LastIndex(href, "/"):], "/")
-}
-
-func convertLabelsToReferenceSlice(labels []*illumioapi.Label) []Reference {
-	refs := []Reference{}
-	for _, label := range labels {
-		refs = append(refs, Reference{Href: label.Href})
-	}
-	return refs
 }
