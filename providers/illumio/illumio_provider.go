@@ -97,16 +97,16 @@ func (IllumioProvider) GetResourceConnections() map[string]map[string][]string {
 	return map[string]map[string][]string{
 		"container_cluster_workload_profile": {
 			"container_cluster": []string{"container_cluster_href", "id"},
-			"label":             []string{"labels.href", "id"},
+			"label":             []string{"labels.href", "id", "assign_labels.href", "id"},
 		},
-		"label_groups": {
+		"label_group": {
 			"label":       []string{"labels.href", "id"},
 			"label_group": []string{"sub_groups.href", "id"},
 		},
-		"managed_workloads": {
+		"managed_workload": {
 			"label": []string{"labels.href", "id"},
 		},
-		"unmanaged_workloads": {
+		"unmanaged_workload": {
 			"label": []string{"labels.href", "id"},
 		},
 	}
