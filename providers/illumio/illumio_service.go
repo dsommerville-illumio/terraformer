@@ -20,7 +20,7 @@ import (
 	"strconv"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/brian1917/illumioapi"
+	"github.com/brian1917/illumioapi/v2"
 )
 
 type IllumioService struct { //nolint

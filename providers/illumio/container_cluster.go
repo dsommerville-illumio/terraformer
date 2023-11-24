@@ -20,7 +20,7 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/brian1917/illumioapi"
+	"github.com/brian1917/illumioapi/v2"
 )
 
 type ContainerClusterGenerator struct {
@@ -51,9 +51,9 @@ func (g ContainerClusterGenerator) loadWorkloadProfiles(
 	return resources
 }
 
-func (g ContainerClusterGenerator) loadContainerClusters(svc *illumioapi.PCE, containerClusters []illumioapi.ContainerCluster) []terraformutils.Resource {
+func (g ContainerClusterGenerator) loadContainerClusters(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
-	for _, cc := range containerClusters {
+	for _, cc := range svc.ContainerClustersSlice {
 		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(cc.Name), stripIdFromHref(cc.Href))
 		resources = append(resources, terraformutils.NewResource(
 			cc.Href,
@@ -76,20 +76,21 @@ func (g *ContainerClusterGenerator) InitResources() error {
 		return err
 	}
 
-	containerClusters, _, err := svc.GetContainerClusters(map[string]string{})
+	_, err = svc.GetContainerClusters(map[string]string{})
 	if err != nil {
 		return err
 	}
-	g.Resources = append(g.Resources, g.loadContainerClusters(svc, containerClusters)...)
+	containerClusters := svc.ContainerClustersSlice
+	g.Resources = append(g.Resources, g.loadContainerClusters(svc)...)
 
 	workloadProfiles := map[string][]illumioapi.ContainerWorkloadProfile{}
 	for _, cc := range containerClusters {
 		clusterID := stripIdFromHref(cc.Href)
-		profiles, _, err := svc.GetContainerWkldProfiles(map[string]string{}, clusterID)
+		_, err := svc.GetContainerWkldProfiles(map[string]string{}, clusterID)
 		if err != nil {
 			log.Printf("Failed to fetch workload profiles for container cluster with ID %q", clusterID)
 		}
-		workloadProfiles[cc.Name] = profiles
+		workloadProfiles[cc.Name] = svc.ContainerWorkloadProfilesSlice
 	}
 	if err != nil {
 		return err

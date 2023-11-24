@@ -19,16 +19,16 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/brian1917/illumioapi"
+	"github.com/brian1917/illumioapi/v2"
 )
 
 type LabelGroupGenerator struct {
 	IllumioService
 }
 
-func (g LabelGroupGenerator) createResources(svc *illumioapi.PCE, labelGroups []illumioapi.LabelGroup) []terraformutils.Resource {
+func (g LabelGroupGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
-	for _, labelGroup := range labelGroups {
+	for _, labelGroup := range svc.LabelGroupsSlice {
 		resourceName := fmt.Sprintf("%s__%s", labelGroup.Key, labelGroup.Name)
 		resources = append(resources, terraformutils.NewSimpleResource(
 			labelGroup.Href,
@@ -47,10 +47,10 @@ func (g *LabelGroupGenerator) InitResources() error {
 		return err
 	}
 	// pass empty params to get all label groups from the PCE
-	labelGroups, _, err := svc.GetLabelGroups(map[string]string{}, DRAFT)
+	_, err = svc.GetLabelGroups(map[string]string{}, DRAFT)
 	if err != nil {
 		return err
 	}
-	g.Resources = g.createResources(svc, labelGroups)
+	g.Resources = g.createResources(svc)
 	return nil
 }

@@ -19,17 +19,17 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/brian1917/illumioapi"
+	"github.com/brian1917/illumioapi/v2"
 )
 
 type ManagedWorkloadGenerator struct {
 	IllumioService
 }
 
-func (g ManagedWorkloadGenerator) createResources(svc *illumioapi.PCE, workloads []illumioapi.Workload) []terraformutils.Resource {
+func (g ManagedWorkloadGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
-	for _, workload := range workloads {
-		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(workload.Hostname), stripIdFromHref(workload.Href))
+	for _, workload := range svc.WorkloadsSlice {
+		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(*workload.Hostname), stripIdFromHref(workload.Href))
 		resources = append(resources, terraformutils.NewResource(
 			workload.Href,
 			resourceName,
@@ -51,10 +51,10 @@ func (g *ManagedWorkloadGenerator) InitResources() error {
 		return err
 	}
 	// only get managed workloads from the PCE
-	workloads, _, err := svc.GetWklds(map[string]string{"managed": "true"})
+	_, err = svc.GetWklds(map[string]string{"managed": "true"})
 	if err != nil {
 		return err
 	}
-	g.Resources = g.createResources(svc, workloads)
+	g.Resources = g.createResources(svc)
 	return nil
 }

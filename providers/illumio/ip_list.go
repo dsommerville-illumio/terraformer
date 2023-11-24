@@ -18,16 +18,16 @@ import (
 	"strings"
 
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
-	"github.com/brian1917/illumioapi"
+	"github.com/brian1917/illumioapi/v2"
 )
 
 type IPListGenerator struct {
 	IllumioService
 }
 
-func (g IPListGenerator) createResources(svc *illumioapi.PCE, ipLists []illumioapi.IPList) []terraformutils.Resource {
+func (g IPListGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
-	for _, ipList := range ipLists {
+	for _, ipList := range svc.IPListsSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(
 			ipList.Href,
 			strings.ToLower(ipList.Name),
@@ -45,10 +45,10 @@ func (g *IPListGenerator) InitResources() error {
 		return err
 	}
 	// pass empty params to get all IP lists from the PCE
-	ipLists, _, err := svc.GetIPLists(map[string]string{}, DRAFT)
+	_, err = svc.GetIPLists(map[string]string{}, DRAFT)
 	if err != nil {
 		return err
 	}
-	g.Resources = g.createResources(svc, ipLists)
+	g.Resources = g.createResources(svc)
 	return nil
 }
