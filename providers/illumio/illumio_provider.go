@@ -1,4 +1,4 @@
-// Copyright 2022 The Terraformer Authors.
+// Copyright 2023 The Terraformer Authors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -99,6 +99,12 @@ func (IllumioProvider) GetResourceConnections() map[string]map[string][]string {
 			"container_cluster": []string{"container_cluster_href", "id"},
 			"label":             []string{"labels.href", "id", "assign_labels.href", "id"},
 		},
+		"enforcement_boundary": {
+			"service":     []string{"ingress_services.href", "id"},
+			"ip_list":     []string{"consumers.ip_list.href", "id", "providers.ip_list.href", "id"},
+			"label":       []string{"consumers.label.href", "id", "providers.label.href", "id"},
+			"label_group": []string{"consumers.label_group.href", "id", "providers.label_group.href", "id"},
+		},
 		"label_group": {
 			"label":       []string{"labels.href", "id"},
 			"label_group": []string{"sub_groups.href", "id"},
@@ -106,20 +112,53 @@ func (IllumioProvider) GetResourceConnections() map[string]map[string][]string {
 		"managed_workload": {
 			"label": []string{"labels.href", "id"},
 		},
+		"pairing_profile": {
+			"label": []string{"labels.href", "id"},
+		},
+		"rule_set": {
+			"label":       []string{"scopes.label.href", "id"},
+			"label_group": []string{"scopes.label_group.href", "id"},
+		},
+		"security_rule": {
+			"rule_set":           []string{"rule_set_href", "id"},
+			"service":            []string{"ingress_services.href", "id"},
+			"ip_list":            []string{"consumers.ip_list.href", "id", "providers.ip_list.href", "id"},
+			"label":              []string{"consumers.label.href", "id", "providers.label.href", "id"},
+			"label_group":        []string{"consumers.label_group.href", "id", "providers.label_group.href", "id"},
+			"virtual_server":     []string{"providers.virtual_server.href", "id"},
+			"virtual_service":    []string{"consumers.virtual_service.href", "id", "providers.virtual_service.href", "id"},
+			"managed_workload":   []string{"consumers.workload.href", "id", "providers.workload.href", "id"},
+			"unmanaged_workload": []string{"consumers.workload.href", "id", "providers.workload.href", "id"},
+		},
+		"service_binding": {
+			"virtual_service":    []string{"virtual_service.href", "id"},
+			"managed_workload":   []string{"workload.href", "id"},
+			"unmanaged_workload": []string{"workload.href", "id"},
+		},
 		"unmanaged_workload": {
 			"label": []string{"labels.href", "id"},
+		},
+		"virtual_service": {
+			"label":   []string{"labels.href", "id"},
+			"service": []string{"service.href", "id"},
 		},
 	}
 }
 
 func (p *IllumioProvider) GetSupportedService() map[string]terraformutils.ServiceGenerator {
 	return map[string]terraformutils.ServiceGenerator{
-		"container_cluster":  &ContainerClusterGenerator{},
-		"ip_list":            &IPListGenerator{},
-		"label":              &LabelGenerator{},
-		"label_group":        &LabelGroupGenerator{},
-		"managed_workload":   &ManagedWorkloadGenerator{},
-		"unmanaged_workload": &UnmanagedWorkloadGenerator{},
+		"container_cluster":    &ContainerClusterGenerator{},
+		"enforcement_boundary": &EnforcementBoundaryGenerator{},
+		"ip_list":              &IPListGenerator{},
+		"label":                &LabelGenerator{},
+		"label_group":          &LabelGroupGenerator{},
+		"label_type":           &LabelTypeGenerator{},
+		"managed_workload":     &ManagedWorkloadGenerator{},
+		"pairing_profile":      &PairingProfileGenerator{},
+		"rule_set":             &RuleSetGenerator{},
+		"service":              &ServiceGenerator{},
+		"unmanaged_workload":   &UnmanagedWorkloadGenerator{},
+		"virtual_services":     &VirtualServiceGenerator{},
 	}
 }
 
