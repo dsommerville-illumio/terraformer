@@ -1,4 +1,4 @@
-// Copyright 2019 The Terraformer Authors.
+// Copyright 2023 The Terraformer Authors.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -80,11 +80,10 @@ func (g *ContainerClusterGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	containerClusters := svc.ContainerClustersSlice
 	g.Resources = append(g.Resources, g.loadContainerClusters(svc)...)
 
 	workloadProfiles := map[string][]illumioapi.ContainerWorkloadProfile{}
-	for _, cc := range containerClusters {
+	for _, cc := range svc.ContainerClustersSlice {
 		clusterID := stripIdFromHref(cc.Href)
 		_, err := svc.GetContainerWkldProfiles(map[string]string{}, clusterID)
 		if err != nil {
