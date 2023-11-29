@@ -46,7 +46,6 @@ func (g *LabelTypeGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	// pass empty params to get all label groups from the PCE
 	_, err = svc.GetLabelDimensions(map[string]string{})
 	if err != nil {
 		return err

@@ -46,7 +46,6 @@ func (g *LabelGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	// pass empty params to get all labels from the PCE
 	_, err = svc.GetLabels(map[string]string{})
 	if err != nil {
 		return err

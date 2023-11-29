@@ -51,7 +51,6 @@ func (g *UnmanagedWorkloadGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	// only get unmanaged workloads from the PCE
 	_, err = svc.GetWklds(map[string]string{"managed": "false"})
 	if err != nil {
 		return err

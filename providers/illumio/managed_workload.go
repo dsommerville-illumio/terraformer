@@ -50,7 +50,6 @@ func (g *ManagedWorkloadGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	// only get managed workloads from the PCE
 	_, err = svc.GetWklds(map[string]string{"managed": "true"})
 	if err != nil {
 		return err

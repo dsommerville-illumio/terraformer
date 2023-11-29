@@ -46,7 +46,6 @@ func (g *LabelGroupGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	// pass empty params to get all label groups from the PCE
 	_, err = svc.GetLabelGroups(map[string]string{}, DRAFT)
 	if err != nil {
 		return err

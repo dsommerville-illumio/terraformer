@@ -44,7 +44,6 @@ func (g *ServiceGenerator) InitResources() error {
 	if err != nil {
 		return err
 	}
-	// pass empty params to get all IP lists from the PCE
 	_, err = svc.GetServices(map[string]string{}, DRAFT)
 	if err != nil {
 		return err
