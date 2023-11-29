@@ -147,18 +147,22 @@ func (IllumioProvider) GetResourceConnections() map[string]map[string][]string {
 
 func (p *IllumioProvider) GetSupportedService() map[string]terraformutils.ServiceGenerator {
 	return map[string]terraformutils.ServiceGenerator{
-		"container_cluster":    &ContainerClusterGenerator{},
-		"enforcement_boundary": &EnforcementBoundaryGenerator{},
-		"ip_list":              &IPListGenerator{},
-		"label":                &LabelGenerator{},
-		"label_group":          &LabelGroupGenerator{},
-		"label_type":           &LabelTypeGenerator{},
-		"managed_workload":     &ManagedWorkloadGenerator{},
-		"pairing_profile":      &PairingProfileGenerator{},
-		"rule_set":             &RuleSetGenerator{},
-		"service":              &ServiceGenerator{},
-		"unmanaged_workload":   &UnmanagedWorkloadGenerator{},
-		"virtual_services":     &VirtualServiceGenerator{},
+		"container_cluster":          &ContainerClusterGenerator{},
+		"enforcement_boundary":       &EnforcementBoundaryGenerator{},
+		"firewall_settings":          &FirewallSettingsGenerator{},
+		"ip_list":                    &IPListGenerator{},
+		"label":                      &LabelGenerator{},
+		"label_group":                &LabelGroupGenerator{},
+		"label_type":                 &LabelTypeGenerator{},
+		"managed_workload":           &ManagedWorkloadGenerator{},
+		"organization_settings":      &OrganizationSettingsGenerator{},
+		"pairing_profile":            &PairingProfileGenerator{},
+		"rule_set":                   &RuleSetGenerator{},
+		"service":                    &ServiceGenerator{},
+		"traffic_collector_settings": &TrafficCollectorSettingsGenerator{},
+		"unmanaged_workload":         &UnmanagedWorkloadGenerator{},
+		"virtual_services":           &VirtualServiceGenerator{},
+		"workload_settings":          &WorkloadSettingsGenerator{},
 	}
 }
 
