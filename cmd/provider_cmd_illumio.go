@@ -14,7 +14,7 @@
 package cmd
 
 import (
-	illumioTerraforming "github.com/GoogleCloudPlatform/terraformer/providers/illumio"
+	illumio_terraforming "github.com/GoogleCloudPlatform/terraformer/providers/illumio"
 	"github.com/GoogleCloudPlatform/terraformer/terraformutils"
 	"github.com/spf13/cobra"
 )
@@ -49,5 +49,5 @@ func newCmdIllumioImporter(options ImportOptions) *cobra.Command {
 }
 
 func newIllumioProvider() terraformutils.ProviderGenerator {
-	return &illumioTerraforming.IllumioProvider{}
+	return &illumio_terraforming.IllumioProvider{}
 }
