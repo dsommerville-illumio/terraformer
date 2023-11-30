@@ -26,7 +26,7 @@ type RuleSetGenerator struct {
 	IllumioService
 }
 
-func (g RuleSetGenerator) loadRules(svc *illumioapi.PCE, rulesMap map[string][]illumioapi.Rule) []terraformutils.Resource {
+func (g *RuleSetGenerator) loadRules(svc *illumioapi.PCE, rulesMap map[string][]illumioapi.Rule) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for ruleSetName, rules := range rulesMap {
 		for _, rule := range rules {
@@ -43,7 +43,7 @@ func (g RuleSetGenerator) loadRules(svc *illumioapi.PCE, rulesMap map[string][]i
 	return resources
 }
 
-func (g RuleSetGenerator) loadRuleSets(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *RuleSetGenerator) loadRuleSets(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, ruleSet := range svc.RuleSetsSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(

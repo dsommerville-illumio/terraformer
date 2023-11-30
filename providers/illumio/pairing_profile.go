@@ -25,7 +25,7 @@ type PairingProfileGenerator struct {
 	IllumioService
 }
 
-func (g PairingProfileGenerator) createResources(svc *illumioapi.PCE, pairingProfiles []illumioapi.PairingProfile) []terraformutils.Resource {
+func (g *PairingProfileGenerator) createResources(svc *illumioapi.PCE, pairingProfiles []illumioapi.PairingProfile) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, pp := range svc.EnforcementBoundariesSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(

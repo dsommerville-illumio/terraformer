@@ -27,7 +27,7 @@ type ContainerClusterGenerator struct {
 	IllumioService
 }
 
-func (g ContainerClusterGenerator) loadWorkloadProfiles(
+func (g *ContainerClusterGenerator) loadWorkloadProfiles(
 	svc *illumioapi.PCE,
 	workloadProfilesMap map[string][]illumioapi.ContainerWorkloadProfile,
 ) []terraformutils.Resource {
@@ -51,7 +51,7 @@ func (g ContainerClusterGenerator) loadWorkloadProfiles(
 	return resources
 }
 
-func (g ContainerClusterGenerator) loadContainerClusters(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *ContainerClusterGenerator) loadContainerClusters(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, cc := range svc.ContainerClustersSlice {
 		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(cc.Name), stripIdFromHref(cc.Href))

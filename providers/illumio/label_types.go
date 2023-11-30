@@ -26,7 +26,7 @@ type LabelTypeGenerator struct {
 	IllumioService
 }
 
-func (g LabelTypeGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *LabelTypeGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, labelType := range svc.LabelDimensionsSlice {
 		resourceName := fmt.Sprintf("%s__%s", labelType.Key, labelType.DisplayName)

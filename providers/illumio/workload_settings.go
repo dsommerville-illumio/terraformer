@@ -26,7 +26,7 @@ type WorkloadSettingsGenerator struct {
 	IllumioService
 }
 
-func (g WorkloadSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *WorkloadSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	return []terraformutils.Resource{terraformutils.NewSimpleResource(
 		fmt.Sprintf("/orgs/%d/settings/workloads", svc.Org),
 		strings.ToLower(fmt.Sprintf("org_%d__workload_settings", svc.Org)),

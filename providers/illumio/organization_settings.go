@@ -26,7 +26,7 @@ type OrganizationSettingsGenerator struct {
 	IllumioService
 }
 
-func (g OrganizationSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *OrganizationSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	return []terraformutils.Resource{terraformutils.NewSimpleResource(
 		fmt.Sprintf("/orgs/%d/settings/events", svc.Org),
 		strings.ToLower(fmt.Sprintf("org_%d__org_settings", svc.Org)),

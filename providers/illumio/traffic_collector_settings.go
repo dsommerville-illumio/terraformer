@@ -26,7 +26,7 @@ type TrafficCollectorSettingsGenerator struct {
 	IllumioService
 }
 
-func (g TrafficCollectorSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *TrafficCollectorSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	return []terraformutils.Resource{terraformutils.NewSimpleResource(
 		fmt.Sprintf("/orgs/%d/settings/traffic_collector", svc.Org),
 		strings.ToLower(fmt.Sprintf("org_%d__traffic_collector_settings", svc.Org)),

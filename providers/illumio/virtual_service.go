@@ -27,7 +27,7 @@ type VirtualServiceGenerator struct {
 	IllumioService
 }
 
-func (g VirtualServiceGenerator) loadServiceBindings(svc *illumioapi.PCE, bindingsMap map[string][]illumioapi.ServiceBinding) []terraformutils.Resource {
+func (g *VirtualServiceGenerator) loadServiceBindings(svc *illumioapi.PCE, bindingsMap map[string][]illumioapi.ServiceBinding) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for virtualServiceName, bindings := range bindingsMap {
 		for _, binding := range bindings {
@@ -44,7 +44,7 @@ func (g VirtualServiceGenerator) loadServiceBindings(svc *illumioapi.PCE, bindin
 	return resources
 }
 
-func (g VirtualServiceGenerator) loadVirtualServices(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *VirtualServiceGenerator) loadVirtualServices(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, vs := range svc.VirtualServicesSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(

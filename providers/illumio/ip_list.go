@@ -25,7 +25,7 @@ type IPListGenerator struct {
 	IllumioService
 }
 
-func (g IPListGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *IPListGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, ipList := range svc.IPListsSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(

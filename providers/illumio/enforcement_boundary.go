@@ -25,7 +25,7 @@ type EnforcementBoundaryGenerator struct {
 	IllumioService
 }
 
-func (g EnforcementBoundaryGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *EnforcementBoundaryGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, eb := range svc.EnforcementBoundariesSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(

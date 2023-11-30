@@ -26,7 +26,7 @@ type FirewallSettingsGenerator struct {
 	IllumioService
 }
 
-func (g FirewallSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *FirewallSettingsGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	return []terraformutils.Resource{terraformutils.NewSimpleResource(
 		fmt.Sprintf("/orgs/%d/sec_policy/draft/firewall_settings", svc.Org),
 		strings.ToLower(fmt.Sprintf("org_%d__firewall_settings", svc.Org)),

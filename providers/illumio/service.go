@@ -25,7 +25,7 @@ type ServiceGenerator struct {
 	IllumioService
 }
 
-func (g ServiceGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *ServiceGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, service := range svc.ServicesSlice {
 		resources = append(resources, terraformutils.NewSimpleResource(

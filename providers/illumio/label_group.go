@@ -26,7 +26,7 @@ type LabelGroupGenerator struct {
 	IllumioService
 }
 
-func (g LabelGroupGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *LabelGroupGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, labelGroup := range svc.LabelGroupsSlice {
 		resourceName := fmt.Sprintf("%s__%s", labelGroup.Key, labelGroup.Name)
