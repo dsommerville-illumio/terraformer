@@ -22,38 +22,42 @@ import (
 	"github.com/brian1917/illumioapi/v2"
 )
 
-type ManagedWorkloadGenerator struct {
+type WorkloadGenerator struct {
 	IllumioService
 }
 
-func (g ManagedWorkloadGenerator) createResources(svc *illumioapi.PCE) []terraformutils.Resource {
+func (g *WorkloadGenerator) loadWorkloads(svc *illumioapi.PCE) []terraformutils.Resource {
 	var resources []terraformutils.Resource
 	for _, workload := range svc.WorkloadsSlice {
-		resourceName := fmt.Sprintf("%s__%s", strings.ToLower(*workload.Hostname), stripIdFromHref(workload.Href))
-		resources = append(resources, terraformutils.NewResource(
-			workload.Href,
-			resourceName,
-			"illumio-core_managed_workload",
-			"illumio-core",
-			map[string]string{},
-			[]string{},
-			map[string]interface{}{
-				"ignored_interface_names": *workload.IgnoredInterfaceNames,
-			},
-		))
+		if workload.VEN == nil {
+			resources = append(resources, g.loadWorkload(workload, "illumio-core_unmanaged_workload"))
+		} else {
+			resources = append(resources, g.loadWorkload(workload, "illumio-core_managed_workload"))
+		}
 	}
 	return resources
 }
 
-func (g *ManagedWorkloadGenerator) InitResources() error {
+func (g *WorkloadGenerator) loadWorkload(workload illumioapi.Workload, resType string) terraformutils.Resource {
+	resourceName := fmt.Sprintf("%s__%s", strings.ToLower(dereference(workload.Hostname)), stripIdFromHref(workload.Href))
+	return terraformutils.NewSimpleResource(
+		workload.Href,
+		resourceName,
+		resType,
+		"illumio-core",
+		[]string{},
+	)
+}
+
+func (g *WorkloadGenerator) InitResources() error {
 	svc, err := g.generateService()
 	if err != nil {
 		return err
 	}
-	_, err = svc.GetWklds(map[string]string{"managed": "true"})
+	_, err = svc.GetWklds(map[string]string{})
 	if err != nil {
 		return err
 	}
-	g.Resources = g.createResources(svc)
+	g.Resources = append(g.Resources, g.loadWorkloads(svc)...)
 	return nil
 }

@@ -32,3 +32,11 @@ func stripIdFromHref(href string) string {
 	}
 	return strings.Trim(href[strings.LastIndex(href, "/"):], "/")
 }
+
+func dereference[T any](field *T) T {
+	if field == nil {
+		var empty T
+		return empty
+	}
+	return *field
+}

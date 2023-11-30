@@ -154,14 +154,13 @@ func (p *IllumioProvider) GetSupportedService() map[string]terraformutils.Servic
 		"label":                      &LabelGenerator{},
 		"label_group":                &LabelGroupGenerator{},
 		"label_type":                 &LabelTypeGenerator{},
-		"managed_workload":           &ManagedWorkloadGenerator{},
 		"organization_settings":      &OrganizationSettingsGenerator{},
 		"pairing_profile":            &PairingProfileGenerator{},
 		"rule_set":                   &RuleSetGenerator{},
 		"service":                    &ServiceGenerator{},
 		"traffic_collector_settings": &TrafficCollectorSettingsGenerator{},
-		"unmanaged_workload":         &UnmanagedWorkloadGenerator{},
 		"virtual_services":           &VirtualServiceGenerator{},
+		"workload":                   &WorkloadGenerator{},
 		"workload_settings":          &WorkloadSettingsGenerator{},
 	}
 }
